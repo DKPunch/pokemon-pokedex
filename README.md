@@ -13,4 +13,5 @@ to open for data manipulation. I have provided an ideal text file (pokemon.txt)
 for optimal use. After loading the file, an option menu will appear.
 
 # Example Screenshot
-coming soon...
+
+![Alt text](https://github.com/DKPunch/pokemon-pokedex/blob/master/pokemonPic.jpg?raw=true "Pokedex Screenshot")
