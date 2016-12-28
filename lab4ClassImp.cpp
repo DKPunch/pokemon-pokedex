@@ -37,33 +37,33 @@ Pokedex::~Pokedex() {
 // Reads data from text file that was input
 // by the user into pointer arrays.
 int Pokedex::loadData() {
-	fstream inputFile;
+	std::fstream inputFile;
 	char tempFileName[strSize], tempStr[strSize];
 	char lastChar;
 	long long charCount;
 
-	cout << "What file would you like to use for input and output? ";
-	cin.getline(tempFileName, strSize);
+	std::cout << "What file would you like to use for input and output? ";
+	std::cin.getline(tempFileName, strSize);
 
 	int size = strlen(tempFileName); // added for set size to tempName
 	fileStr = new char[size + 1]; // +1 for NULL
 	strncpy(fileStr, tempFileName, size); // (destination, source, num)
 	fileStr[size] = '\0'; // Explicit NULL termination
-	inputFile.open(fileStr, ios::in);
+	inputFile.open(fileStr, std::ios::in);
 
 	while (!inputFile.is_open()) {  // Invalid File Error Check
-		cout << "File does not exist. Please try another file name: ";
-		cin.getline(tempFileName, strSize);
+		std::cout << "File does not exist. Please try another file name: ";
+		std::cin.getline(tempFileName, strSize);
 
 		size = strlen(tempFileName);
 		fileStr = new char[size + 1];
 		strncpy(fileStr, tempFileName, size);
 		fileStr[size] = '\0';
-		inputFile.open(fileStr, ios::in);
+		inputFile.open(fileStr, std::ios::in);
 	}
 	inputFile.close();
 
-	inputFile.open(fileStr, ios::in | ios::out);
+	inputFile.open(fileStr, std::ios::in | std::ios::out);
 	if (count < maxCreatures) {
 		while (!inputFile.eof()) {
 			Pokemon * ptr = new Pokemon;
@@ -96,10 +96,10 @@ int Pokedex::loadData() {
 	}
 
 	// Check if last char in the file is \n. If not, then adds \n.
-	inputFile.seekg(0, ios::end);
+	inputFile.seekg(0, std::ios::end);
 	charCount = inputFile.tellg();
 	if (charCount > 0) {
-		inputFile.seekg(-1, ios::end);
+		inputFile.seekg(-1, std::ios::end);
 		lastChar = inputFile.peek();
 		if (lastChar != '\n')
 			inputFile.write("\n", 1);
@@ -107,10 +107,12 @@ int Pokedex::loadData() {
 	inputFile.close();
 
 	if (count >= maxCreatures) {   // Pokedex capacity check
-		cout << "Successfully loaded " << count << " Pokemon, but the Pokedex is now full!" << endl;
+		std::cout << "Successfully loaded " << count 
+			<< " Pokemon, but the Pokedex is now full!" << std::endl;
 	}
 	else {
-		cout << "Successfully loaded " << count << " Pokemon..." << endl;
+		std::cout << "Successfully loaded " << count 
+			<< " Pokemon..." << std::endl;
 	}
 	displayData();
 	return 0;
@@ -135,30 +137,30 @@ void Pokedex::exeChoice(char reply) {
 		writeData();
 		break;
 	default:
-		cout << "Error, invalid input\n" << endl;
+		std::cout << "Error, invalid input\n" << std::endl;
 		break;
 	}
 }
 
 // Displays all data from the database onto the screen.
 void Pokedex::displayData() {
-	cout << endl << left << setw(nameWidth) << "Name"
-		<< left << setw(typeWidth) << "Type"
-		<< left << setw(hpWidth) << "Hit Points"
-		<< left << setw(atkWidth) << "Attack"
-		<< left << setw(defWidth) << "Defense"
-		<< left << setw(abilWidth) << "Ability" << endl;
-	cout << "----------------------------------------"
-		<< "----------------------------------------" << endl;
+	std::cout << std::endl << std::left << std::setw(nameWidth) << "Name"
+		<< std::left << std::setw(typeWidth) << "Type"
+		<< std::left << std::setw(hpWidth) << "Hit Points"
+		<< std::left << std::setw(atkWidth) << "Attack"
+		<< std::left << std::setw(defWidth) << "Defense"
+		<< std::left << std::setw(abilWidth) << "Ability" << std::endl;
+	std::cout << "----------------------------------------"
+		<< "----------------------------------------" << std::endl;
 	for (int index = 0; index < count; index++) {
-		cout << left << setw(nameWidth) << creatures[index]->name
-			<< left << setw(typeWidth) << creatures[index]->type
-			<< left << setw(hpWidth) << creatures[index]->hitPoints
-			<< left << setw(atkWidth) << creatures[index]->attack
-			<< left << setw(defWidth) << creatures[index]->defense
-			<< left << setw(abilWidth) << creatures[index]->ability << endl;
+		std::cout << std::left << std::setw(nameWidth) << creatures[index]->name
+			<< std::left << std::setw(typeWidth) << creatures[index]->type
+			<< std::left << std::setw(hpWidth) << creatures[index]->hitPoints
+			<< std::left << std::setw(atkWidth) << creatures[index]->attack
+			<< std::left << std::setw(defWidth) << creatures[index]->defense
+			<< std::left << std::setw(abilWidth) << creatures[index]->ability << std::endl;
 	}
-	cout << "\n";
+	std::cout << "\n";
 }
 
 // Takes user input and adds this data as a
@@ -181,13 +183,14 @@ void Pokedex::addPokemon() {
 		ptr->ability = new char[strlen(tempStr) + 1];
 		strncpy(ptr->ability, tempStr, strlen(tempStr) + 1);
 
-		cout << "\nSuccessfully added " << ptr->name << " to the pokedex.\n" << endl;
+		std::cout << "\nSuccessfully added " << ptr->name 
+			<< " to the pokedex.\n" << std::endl;
 
 		creatures[count] = ptr;
 		count++;
 	}
 	else {
-		cout << "Cannot add anymore pokemon. Pokedex is full!\n" << endl;
+		std::cout << "Cannot add anymore pokemon. Pokedex is full!\n" << std::endl;
 	}
 }
 
@@ -198,20 +201,20 @@ void Pokedex::searchByName() {
 	int i;
 	bool found = false;
 
-	cout << "Which creature would you like to search for: ";
-	cin.getline(searchInput, strSize);
+	std::cout << "Which creature would you like to search for: ";
+	std::cin.getline(searchInput, strSize);
 
 	for (i = 0; i < count; i++) {
 		if (strcmp(searchInput, creatures[i]->name) == 0) {
-			cout << "The data for " << searchInput << " is as follows:" << endl;
-			cout << "type: " << creatures[i]->type << ", hit points: " << creatures[i]->hitPoints
+			std::cout << "The data for " << searchInput << " is as follows:" << std::endl;
+			std::cout << "type: " << creatures[i]->type << ", hit points: " << creatures[i]->hitPoints
 				<< ", attack: " << creatures[i]->attack << ", defense: " << creatures[i]->defense
-				<< ", ability: " << creatures[i]->ability << "\n" << endl;
+				<< ", ability: " << creatures[i]->ability << "\n" << std::endl;
 			found = true;
 		}
 	}
 	if (found == false)
-		cout << "I'm sorry, " << searchInput << " was not found in the pokedex.\n" << endl;
+		std::cout << "I'm sorry, " << searchInput << " was not found in the pokedex.\n" << std::endl;
 }
 
 // Searches for a creature in the database
@@ -228,21 +231,21 @@ void Pokedex::findMaxHP() {
 
 	for (i = 0; i < count; i++) {
 		if (temp == creatures[i]->hitPoints) {
-			cout << "The creature with the max hit points is as follows: " << endl;
-			cout << "Name: " << creatures[i]->name << ", type: " << creatures[i]->type
+			std::cout << "The creature with the max hit points is as follows: " << std::endl;
+			std::cout << "Name: " << creatures[i]->name << ", type: " << creatures[i]->type
 				<< ", hit points: " << creatures[i]->hitPoints << ", attack: "
 				<< creatures[i]->attack << ", defense: " << creatures[i]->defense
-				<< ", ability: " << creatures[i]->ability << "\n" << endl;
+				<< ", ability: " << creatures[i]->ability << "\n" << std::endl;
 		}
 	}
 }
 
 // Writes all data to the original text file.
 void Pokedex::writeData() {
-	ofstream outFile;
-	outFile.open(fileStr, ios::in | ios::out);
+	std::ofstream outFile;
+	outFile.open(fileStr, std::ios::in | std::ios::out);
 	if (!outFile) {
-		cout << "cannot open file to write new data!";
+		std::cout << "cannot open file to write new data!";
 		exit(0);
 	}
 
@@ -262,6 +265,6 @@ void Pokedex::writeData() {
 	}
 
 	outFile.close();
-	cout << "Successfully wrote creature data to the pokedex file." << endl;
-	cout << "Terminating program..." << endl;
+	std::cout << "Successfully wrote creature data to the pokedex file." << std::endl;
+	std::cout << "Terminating program..." << std::endl;
 }
