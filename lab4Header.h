@@ -12,8 +12,6 @@
 #include <fstream>
 #include <cstring>
 
-using namespace std;
-
 // Global Constants
 const int strSize = 200;
 const int maxCreatures = 100;
